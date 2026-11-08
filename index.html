@@ -4,17 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Vision 2 · Lesson 1 – Interactive Book</title>
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #58cc02; --primary-dark: #46a302; --bg: #f0f4f8; --card: #fff;
-      --text: #2d3748; --muted: #718096; --border: #e2e8f0; --blue: #1cb0f6; --blue-dark: #1899d6; --accent: #e53e3e;
+      --text: #2d3748; --muted: #718096; --border: #e2e8f0; --blue: #1cb0f6;
+      --blue-dark: #1899d6; --accent: #e53e3e; --purple: #805ad5;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body { font-family: 'Vazirmatn', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; justify-content: center; }
     #app { width: 100%; max-width: 720px; background: var(--card); min-height: 100vh; box-shadow: 0 0 40px rgba(0,0,0,.06); display: flex; flex-direction: column; }
     .header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 2px solid var(--border); background: #fff; position: sticky; top: 0; z-index: 50; }
-    .header h1 { font-size: 1.15rem; font-weight: 900; }
+    .header h1 { font-size: 1.1rem; font-weight: 900; }
     .header-btn { background: #f1f5f9; border: none; padding: 8px 12px; border-radius: 10px; font-size: 1rem; cursor: pointer; }
     .fc-btn { background: #fef3c7; color: #d97706; border: 2px solid #fcd34d; font-weight: 700; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 10px; cursor: pointer; }
     .badge { background: #d97706; color: #fff; border-radius: 999px; min-width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 900; }
@@ -24,26 +25,27 @@
     .toc-title { text-align: center; margin-bottom: 8px; }
     .toc-title h2 { color: var(--primary-dark); font-size: 1.5rem; font-weight: 900; }
     .toc-title p { color: var(--muted); font-size: .9rem; margin-top: 4px; }
-    .section-card { border: 2px solid var(--border); border-radius: 16px; padding: 16px; display: flex; align-items: center; gap: 14px; cursor: pointer; background: #fff; transition: .15s; }
+    .section-card { border: 2px solid var(--border); border-radius: 16px; padding: 16px; display: flex; align-items: center; gap: 14px; cursor: pointer; background: #fff; transition: .15s; position: relative; }
     .section-card:hover { border-color: var(--primary); }
     .sec-icon { width: 48px; height: 48px; border-radius: 50%; background: #e0f2fe; border: 3px solid var(--blue); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
     .sec-info { flex: 1; }
     .sec-info h3 { font-size: 1.05rem; color: var(--primary-dark); margin-bottom: 2px; }
     .sec-info p { font-size: .82rem; color: var(--muted); line-height: 1.4; }
     .sec-pages { background: #f1f5f9; color: var(--muted); border-radius: 999px; padding: 3px 10px; font-size: .75rem; font-weight: 700; white-space: nowrap; }
+    .sec-done { position: absolute; top: 10px; left: 12px; background: var(--primary); color: #fff; font-size: .7rem; padding: 2px 8px; border-radius: 999px; font-weight: 700; }
     .book-page { padding: 16px 18px 100px; background: #fefefe; flex: 1; overflow-y: auto; direction: ltr; text-align: left; font-family: Inter, system-ui, sans-serif; }
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; direction: rtl; font-family: Vazirmatn, sans-serif; }
     .page-num-badge { background: #edf2f7; color: #4a5568; font-weight: 700; font-size: .8rem; padding: 4px 12px; border-radius: 999px; }
     .study-btn { background: var(--primary); color: #fff; border: none; padding: 10px 18px; border-radius: 12px; font-weight: 700; font-size: .95rem; cursor: pointer; box-shadow: 0 3px 0 var(--primary-dark); display: flex; align-items: center; gap: 6px; font-family: Vazirmatn, sans-serif; }
     .study-btn:active { transform: translateY(3px); box-shadow: none; }
+    .study-btn.done { background: #48bb78; box-shadow: 0 3px 0 #2f855a; }
     .book-section-title { background: linear-gradient(90deg,#1a5f9e,#3498db); color: #fff; display: inline-block; padding: 6px 16px; border-radius: 8px; font-size: 1.15rem; font-weight: 700; margin: 18px 0 12px; }
     .book-text { line-height: 1.7; font-size: .98rem; margin-bottom: 12px; color: #2d3748; }
     .dialogue { background: #f0f7ff; border-left: 4px solid #1a5f9e; padding: 12px 16px; margin: 12px 0; border-radius: 0 10px 10px 0; font-size: .95rem; line-height: 1.65; }
     .dialogue strong { color: #1a5f9e; }
     .word-bank { background: #fff8e6; border: 2px dashed #f0ad4e; border-radius: 10px; padding: 10px 14px; margin: 12px 0; font-size: .9rem; }
     .word-bank span { display: inline-block; background: #ffe8a1; padding: 2px 8px; margin: 2px; border-radius: 4px; font-weight: 600; }
-    .placeholder-img { background: linear-gradient(135deg,#e2e8f0,#edf2f7); border: 2px dashed #a0aec0; border-radius: 10px; min-height: 120px; display: flex; align-items: center; justify-content: center; color: #718096; font-size: .9rem; margin: 12px 0; text-align: center; padding: 16px; flex-direction: column; gap: 6px; }
-    .placeholder-img .icon { font-size: 2rem; }
+    .placeholder-img { background: linear-gradient(135deg,#e2e8f0,#edf2f7); border: 2px dashed #a0aec0; border-radius: 10px; min-height: 100px; display: flex; align-items: center; justify-content: center; color: #718096; font-size: .9rem; margin: 12px 0; text-align: center; padding: 16px; flex-direction: column; gap: 6px; }
     .exercise-box { background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; margin: 14px 0; }
     .exercise-box h4 { color: #e53e3e; margin-bottom: 8px; font-size: .95rem; }
     .blank { display: inline-block; min-width: 90px; border-bottom: 1.5px solid #718096; margin: 0 3px; }
@@ -55,41 +57,62 @@
     .strategy-box h4 { color: #2e7d32; margin-bottom: 6px; }
     .vocab-item { background: #f3e5f5; border-left: 4px solid #8e24aa; padding: 8px 12px; margin: 8px 0; border-radius: 0 6px 6px 0; font-size: .92rem; }
     .vocab-item strong { color: #6a1b9a; }
-    .questions-box { background: #e3f2fd; border-radius: 10px; padding: 12px 16px; margin: 14px 0; }
     .page-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 720px; background: #fff; border-top: 2px solid var(--border); padding: 10px 16px; display: flex; justify-content: space-between; gap: 10px; z-index: 40; direction: rtl; font-family: Vazirmatn, sans-serif; }
     .nav-btn { flex: 1; background: #f1f5f9; border: 2px solid var(--border); border-radius: 12px; padding: 12px; font-weight: 700; font-size: .95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
     .nav-btn:disabled { opacity: .4; cursor: default; }
     .nav-btn.primary { background: var(--primary); color: #fff; border-color: var(--primary-dark); box-shadow: 0 3px 0 var(--primary-dark); }
     #studyScreen { background: var(--bg); }
-    .study-content { flex: 1; padding: 20px 16px; display: flex; flex-direction: column; overflow-y: auto; }
-    .focus-word-container { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; gap: 16px; text-align: center; }
-    .focus-word { font-size: 2.4rem; font-weight: 900; color: var(--text); display: flex; align-items: center; gap: 12px; direction: ltr; }
-    .focus-meaning { font-size: 1.3rem; color: var(--muted); font-weight: 600; }
-    .tts-btn { background: #e0f2fe; border: 2px solid var(--blue); border-radius: 50%; width: 48px; height: 48px; font-size: 1.3rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .action-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
-    .btn { background: var(--primary); color: #fff; border: none; padding: 14px 20px; font-size: 1.05rem; font-weight: 700; border-radius: 14px; cursor: pointer; box-shadow: 0 4px 0 var(--primary-dark); text-align: center; font-family: Vazirmatn, sans-serif; width: 100%; }
+    .progress-bar { height: 8px; background: #e2e8f0; margin: 0 16px 4px; border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width .35s; }
+    .step-label { text-align: center; font-size: .8rem; color: var(--muted); margin-bottom: 6px; font-weight: 600; }
+    .study-content { flex: 1; padding: 12px 16px 20px; display: flex; flex-direction: column; overflow-y: auto; }
+    .study-footer { padding: 12px 16px 20px; background: #fff; border-top: 2px solid var(--border); }
+    .word-teach { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; gap: 14px; text-align: center; padding: 20px 10px; }
+    .word-big { font-size: 2.6rem; font-weight: 900; color: var(--text); direction: ltr; display: flex; align-items: center; gap: 14px; }
+    .word-meaning { font-size: 1.4rem; color: var(--muted); font-weight: 700; }
+    .word-example { background: #edf2f7; border-radius: 12px; padding: 12px 18px; font-size: .95rem; color: #4a5568; direction: ltr; max-width: 90%; line-height: 1.5; }
+    .tts-btn { background: #e0f2fe; border: 2px solid var(--blue); border-radius: 50%; width: 52px; height: 52px; font-size: 1.4rem; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .grammar-note { background: linear-gradient(135deg,#faf5ff,#f3e8ff); border: 2px solid #d6bcfa; border-radius: 16px; padding: 18px 20px; margin: 10px 0; text-align: right; }
+    .grammar-note .label { display: inline-block; background: var(--purple); color: #fff; font-size: .75rem; font-weight: 800; padding: 3px 10px; border-radius: 999px; margin-bottom: 10px; }
+    .grammar-note h3 { font-size: 1.15rem; color: #553c9a; margin-bottom: 8px; }
+    .grammar-note p { font-size: .95rem; line-height: 1.7; color: #4a5568; }
+    .build-wrap { display: flex; flex-direction: column; flex: 1; gap: 12px; }
+    .build-prompt { text-align: center; font-size: 1.05rem; font-weight: 700; color: var(--text); }
+    .build-fa { text-align: center; font-size: 1rem; color: var(--muted); margin-bottom: 8px; }
+    .slots { display: flex; flex-wrap: wrap; gap: 8px; min-height: 56px; background: #f8fafc; border: 2px dashed #cbd5e0; border-radius: 14px; padding: 12px; justify-content: center; direction: ltr; align-items: center; }
+    .slot-word, .bank-word { background: #fff; border: 2px solid var(--border); border-radius: 12px; padding: 10px 16px; font-weight: 700; cursor: pointer; font-size: 1.05rem; direction: ltr; user-select: none; }
+    .bank-word { background: #e0f2fe; border-color: var(--blue); }
+    .bank-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; direction: ltr; margin: 8px 0; }
+    .check-msg { text-align: center; font-weight: 800; font-size: 1.15rem; min-height: 32px; margin-top: 6px; }
+    .check-msg.ok { color: var(--primary-dark); }
+    .check-msg.bad { color: var(--accent); }
+    .help-bar { display: flex; justify-content: center; gap: 10px; margin-top: 8px; }
+    .help-btn { background: #fff7ed; color: #c05621; border: 2px solid #fdba74; border-radius: 12px; padding: 8px 14px; font-weight: 700; font-size: .9rem; cursor: pointer; font-family: Vazirmatn, sans-serif; }
+    .help-panel { background: #fff; border: 2px solid #fdba74; border-radius: 14px; padding: 14px; margin-top: 10px; text-align: right; display: none; }
+    .help-panel.show { display: block; }
+    .help-word-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #edf2f7; direction: ltr; }
+    .help-word-item .en { font-weight: 800; font-size: 1.05rem; }
+    .help-word-item .fa { color: var(--muted); font-size: .95rem; direction: rtl; }
+    .btn { background: var(--primary); color: #fff; border: none; padding: 15px 20px; font-size: 1.05rem; font-weight: 700; border-radius: 14px; cursor: pointer; box-shadow: 0 4px 0 var(--primary-dark); text-align: center; font-family: Vazirmatn, sans-serif; width: 100%; }
     .btn:active { transform: translateY(4px); box-shadow: none; }
     .btn.secondary { background: #fff; color: var(--text); border: 2px solid var(--border); box-shadow: 0 4px 0 var(--border); }
     .btn.save-btn { background: var(--blue); box-shadow: 0 4px 0 var(--blue-dark); }
-    .build-area { direction: ltr; text-align: left; }
-    .target-fa { text-align: center; font-size: 1.1rem; color: var(--muted); margin-bottom: 16px; font-weight: 600; }
-    .slots { display: flex; flex-wrap: wrap; gap: 8px; min-height: 52px; background: #f8fafc; border: 2px dashed #cbd5e0; border-radius: 12px; padding: 10px; margin-bottom: 18px; justify-content: center; direction: ltr; }
-    .slot-word, .bank-word { background: #fff; border: 2px solid var(--border); border-radius: 10px; padding: 8px 14px; font-weight: 700; cursor: pointer; font-size: 1rem; direction: ltr; }
-    .bank-word { background: #e0f2fe; border-color: var(--blue); }
-    .word-bank-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; direction: ltr; margin-bottom: 20px; }
-    .check-result { text-align: center; font-weight: 700; font-size: 1.1rem; margin: 10px 0; min-height: 28px; }
-    .check-result.ok { color: var(--primary-dark); }
-    .check-result.bad { color: var(--accent); }
-    .finish-box { text-align: center; padding: 40px 20px; }
+    .btn:disabled { opacity: .5; cursor: default; }
+    .quiz-q { font-size: 1.2rem; font-weight: 800; text-align: center; margin: 16px 0 20px; line-height: 1.5; }
+    .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+    .quiz-opt { background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 14px 16px; font-size: 1.05rem; font-weight: 600; cursor: pointer; text-align: right; direction: rtl; }
+    .quiz-opt.correct { background: #c6f6d5; border-color: var(--primary-dark); color: #276749; }
+    .quiz-opt.wrong { background: #fed7d7; border-color: var(--accent); color: #9b2c2c; }
+    .quiz-opt.disabled { pointer-events: none; }
+    .finish-box { text-align: center; padding: 40px 16px; }
     .finish-box h2 { font-size: 1.8rem; margin-bottom: 10px; }
-    .progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; margin: 0 16px 8px; overflow: hidden; }
-    .progress-fill { height: 100%; background: var(--primary); border-radius: 3px; transition: width .3s; }
-    .study-footer { padding: 12px 16px 20px; background: #fff; border-top: 2px solid var(--border); }
+    .finish-box p { color: var(--muted); margin-bottom: 12px; }
     .fc-list { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
     .fc-card { background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 16px; display: flex; justify-content: space-between; align-items: center; direction: ltr; }
-    .fc-.fc-card .en { font-weight: 800; font-size: 1.1rem; }
+    .fc-card .en { font-weight: 800; font-size: 1.1rem; }
     .fc-card .fa { color: var(--muted); font-size: .95rem; margin-top: 2px; direction: rtl; text-align: right; }
     .hidden { display: none !important; }
+    .action-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 6px; }
   </style>
 </head>
 <body>
@@ -101,7 +124,10 @@
   </div>
   <div id="homeScreen" class="screen active">
     <div class="toc">
-      <div class="toc-title"><h2>Vision 2 · Lesson 1</h2><p>کتاب انگلیسی ۲ پایه یازدهم — صفحات کتاب را ورق بزن یا مطالعه کن</p></div>
+      <div class="toc-title">
+        <h2>Vision 2 · Lesson 1</h2>
+        <p>ابتدا مطالعه کن، بعد آزمون بده، بعد برو صفحه بعد</p>
+      </div>
       <div id="sectionList"></div>
     </div>
   </div>
@@ -114,20 +140,277 @@
   </div>
   <div id="studyScreen" class="screen">
     <div class="progress-bar"><div class="progress-fill" id="studyProgress" style="width:0%"></div></div>
+    <div class="step-label" id="stepLabel"></div>
     <div class="study-content" id="studyContent"></div>
     <div class="study-footer"><button class="btn hidden" id="studyNextBtn"></button></div>
   </div>
   <div id="fcScreen" class="screen"><div class="fc-list" id="fcList"></div></div>
 </div>
 <script>
-/* Full data and logic - see repository for complete source */
-const PAGES = [ /* truncated for tool limit - full version in local artifacts */ ];
-console.log('Vision 2 loaded. Full interactive version available.');
-// Placeholder - the complete index.html with all pages and study sequences is in the local build.
-// Please use the file from /home/workdir/artifacts/vision2/index.html
-document.getElementById('sectionList').innerHTML = '<p style="text-align:center;padding:40px;color:#718096">فایل کامل index.html را از artifacts آپلود کنید یا از نسخه محلی استفاده کنید.<br>Full index.html is ready in the artifacts folder.</p>';
-function goHome(){}
-function openFlashcards(){}
+const DICT = {
+  "I":{fa:"من",example:"I am a student."},"you":{fa:"تو / شما",example:"I know you."},"know":{fa:"دانستن / بلد بودن",example:"I know English."},"three":{fa:"سه",example:"three languages"},"languages":{fa:"زبان‌ها",example:"I know three languages."},"heard":{fa:"شنیدم",example:"I heard a story."},"actually":{fa:"در واقع",example:"Actually, I know four."},"four":{fa:"چهار",example:"four languages"},"besides":{fa:"علاوه بر",example:"Besides English, I know French."},"my":{fa:"مال من / ـم",example:"my mother tongue"},"mother":{fa:"مادر / مادری",example:"mother tongue"},"tongue":{fa:"زبان (گفتاری)",example:"mother tongue"},"Persian":{fa:"فارسی",example:"My mother tongue is Persian."},"English":{fa:"انگلیسی",example:"I learn English."},"French":{fa:"فرانسوی",example:"She speaks French."},"Russian":{fa:"روسی",example:"He learned Russian."},"well":{fa:"خوب",example:"I know them well."},"began":{fa:"شروع کرد",example:"I began learning English."},"learning":{fa:"یادگیری",example:"learning English"},"at":{fa:"در",example:"at school"},"school":{fa:"مدرسه",example:"at school"},"when":{fa:"وقتی که",example:"when I was thirteen"},"was":{fa:"بودم / بود",example:"I was thirteen."},"thirteen":{fa:"سیزده",example:"I was thirteen."},"fluently":{fa:"به‌طور روان",example:"speak fluently"},"experience":{fa:"تجربه",example:"My experience says..."},"interest":{fa:"علاقه",example:"interest and hard work"},"and":{fa:"و",example:"English and French"},"hard":{fa:"سخت",example:"hard work"},"work":{fa:"کار",example:"hard work"},"are":{fa:"هستند",example:"they are important"},"more":{fa:"بیشتر",example:"more important"},"important":{fa:"مهم",example:"more important than age"},"than":{fa:"از (مقایسه)",example:"more than age"},"age":{fa:"سن",example:"more important than age"},"favorite":{fa:"مورد علاقه",example:"my favorite language"},"language":{fa:"زبان",example:"a new language"},"is":{fa:"است",example:"It is important."},"absolutely":{fa:"کاملاً / قطعاً",example:"absolutely my mother tongue"},
+  "region":{fa:"منطقه",example:"farming regions"},"continent":{fa:"قاره",example:"the largest continent"},"exist":{fa:"وجود داشتن",example:"Does water exist?"},"native":{fa:"بومی / مادری",example:"native language"},"range":{fa:"متغیر بودن از ... تا",example:"prices range from $5 to $15"},"popular":{fa:"محبوب / رایج",example:"the most popular food"},"percent":{fa:"درصد",example:"40 percent"},"imagine":{fa:"تصور کردن",example:"Imagine you are in space."},"century":{fa:"قرن",example:"twenty-first century"},"society":{fa:"جامعه",example:"an Islamic society"},"ability":{fa:"توانایی",example:"the ability to talk"},"vary":{fa:"متفاوت بودن",example:"prices vary"},"despite":{fa:"علی‌رغم",example:"despite the weather"},
+  "communication":{fa:"ارتباط",example:"system of communication"},"exchange":{fa:"رد و بدل کردن",example:"exchange knowledge"},"endangered":{fa:"در خطر انقراض",example:"endangered languages"},"valuable":{fa:"ارزشمند",example:"All languages are valuable."},"respect":{fa:"احترام گذاشتن",example:"respect all languages"},
+  "countable":{fa:"قابل شمارش",example:"countable nouns"},"uncountable":{fa:"غیرقابل شمارش",example:"uncountable nouns"},"many":{fa:"تعداد زیاد (قابل شمارش)",example:"many books"},"much":{fa:"مقدار زیاد (غیرقابل شمارش)",example:"much information"},"a lot of":{fa:"مقدار زیاد",example:"a lot of milk"},"a few":{fa:"تعداد کمی",example:"a few men"},"a little":{fa:"مقدار کمی",example:"a little bread"},"a bottle of":{fa:"یک بطری از",example:"a bottle of water"},"a loaf of":{fa:"یک قرص نان",example:"a loaf of bread"},"a piece of":{fa:"یک تکه از",example:"a piece of cake"},"a glass of":{fa:"یک لیوان از",example:"a glass of water"},
+  "how much":{fa:"چقدر (قیمت)",example:"How much is it?"},"how many":{fa:"چند تا",example:"How many candles?"},"looking for":{fa:"دنبال گشتن",example:"I'm looking for candles."},"candles":{fa:"شمع‌ها",example:"birthday candles"},"need":{fa:"نیاز داشتن",example:"I need 12 candles."},
+  "subject":{fa:"فاعل",example:"The subject is Mahan."},"verb":{fa:"فعل",example:"The verb is sleeping."},"object":{fa:"مفعول",example:"milk is the object."},"sentence":{fa:"جمله",example:"a simple sentence"}
+};
+
+const STUDY = {
+  conversation: { title: "Conversation – Mr. Saberian", steps: [
+    {type:"word",word:"heard"},{type:"word",word:"know"},{type:"word",word:"three"},{type:"word",word:"languages"},
+    {type:"phrase",target:"I heard you know three languages",fa:"شنیدم تو سه زبان بلدی",bank:["I","heard","you","know","three","languages"]},
+    {type:"word",word:"actually"},{type:"word",word:"four"},
+    {type:"phrase",target:"Actually I know four languages",fa:"در واقع من چهار زبان بلدم",bank:["Actually","I","know","four","languages"]},
+    {type:"word",word:"besides"},{type:"word",word:"mother"},{type:"word",word:"tongue"},{type:"word",word:"Persian"},
+    {type:"phrase",target:"Besides my mother tongue Persian",fa:"علاوه بر زبان مادری‌ام، فارسی",bank:["Besides","my","mother","tongue","Persian"]},
+    {type:"grammar",title:"نکته: mother tongue",text:"عبارت <b>mother tongue</b> یعنی «زبان مادری». معمولاً با my / his / her می‌آید:<br>My mother tongue is Persian."},
+    {type:"word",word:"French"},{type:"word",word:"Russian"},{type:"word",word:"well"},
+    {type:"phrase",target:"I know English French and Russian well",fa:"من انگلیسی، فرانسوی و روسی را خوب می‌دانم",bank:["I","know","English","French","and","Russian","well"]},
+    {type:"word",word:"began"},{type:"word",word:"learning"},{type:"word",word:"thirteen"},
+    {type:"phrase",target:"I began learning English at school when I was thirteen",fa:"وقتی سیزده ساله بودم در مدرسه شروع به یادگیری انگلیسی کردم",bank:["I","began","learning","English","at","school","when","I","was","thirteen"]},
+    {type:"grammar",title:"نکته: began + -ing",text:"بعد از <b>began</b> معمولاً فعل با <b>-ing</b> می‌آید:<br>I began <b>learning</b> English."},
+    {type:"word",word:"experience"},{type:"word",word:"interest"},{type:"word",word:"important"},{type:"word",word:"age"},
+    {type:"phrase",target:"interest and hard work are more important than age",fa:"علاقه و سخت‌کوشی از سن مهم‌ترند",bank:["interest","and","hard","work","are","more","important","than","age"]},
+    {type:"word",word:"absolutely"},
+    {type:"phrase",target:"my favorite language is absolutely my mother tongue",fa:"زبان مورد علاقه‌ام قطعاً زبان مادری‌ام است",bank:["my","favorite","language","is","absolutely","my","mother","tongue"]},
+    {type:"quiz",questions:[
+      {q:"معنی «mother tongue» چیست؟",options:["زبان مادری","زبان خارجی","زبان رسمی","لهجه"],answer:0},
+      {q:"«I began learning English» یعنی:",options:["من انگلیسی بلدم","من شروع به یادگیری انگلیسی کردم","من انگلیسی را تمام کردم","من انگلیسی را دوست دارم"],answer:1},
+      {q:"کدام جمله درست است؟",options:["interest are important","interest and hard work are more important than age","age is more important","hard work than age"],answer:1},
+      {q:"«actually» یعنی:",options:["شاید","در واقع","هرگز","همیشه"],answer:1},
+      {q:"«fluently» یعنی:",options:["آهسته","با اشتباه","به‌طور روان","با صدای بلند"],answer:2}
+    ]}
+  ]},
+  newwords: { title: "New Words", steps: [
+    {type:"word",word:"region"},{type:"word",word:"continent"},{type:"word",word:"exist"},{type:"word",word:"native"},
+    {type:"word",word:"range"},{type:"word",word:"popular"},{type:"word",word:"percent"},{type:"word",word:"imagine"},
+    {type:"word",word:"century"},{type:"word",word:"society"},{type:"word",word:"ability"},{type:"word",word:"vary"},{type:"word",word:"despite"},
+    {type:"phrase",target:"Asia is the largest continent of the world",fa:"آسیا بزرگ‌ترین قاره جهان است",bank:["Asia","is","the","largest","continent","of","the","world"]},
+    {type:"grammar",title:"نکته: make up",text:"عبارت <b>make up</b> اینجا یعنی «تشکیل دادن».<br>China <b>makes up</b> 18% of the world’s population."},
+    {type:"quiz",questions:[
+      {q:"«continent» یعنی:",options:["کشور","قاره","شهر","اقیانوس"],answer:1},
+      {q:"«despite» یعنی:",options:["به‌خاطر","علی‌رغم","به‌جای","قبل از"],answer:1},
+      {q:"«native language» یعنی:",options:["زبان خارجی","زبان مادری / بومی","زبان رسمی","لهجه"],answer:1},
+      {q:"«exist» یعنی:",options:["از بین رفتن","وجود داشتن","رشد کردن","حرکت کردن"],answer:1}
+    ]}
+  ]},
+  reading: { title: "Reading", steps: [
+    {type:"word",word:"communication"},{type:"word",word:"exchange"},{type:"word",word:"endangered"},
+    {type:"word",word:"valuable"},{type:"word",word:"respect"},
+    {type:"phrase",target:"about 7000 languages exist in the world",fa:"حدود ۷۰۰۰ زبان در جهان وجود دارد",bank:["about","7000","languages","exist","in","the","world"]},
+    {type:"phrase",target:"The most popular language in the world is Chinese",fa:"رایج‌ترین زبان دنیا چینی است",bank:["The","most","popular","language","in","the","world","is","Chinese"]},
+    {type:"phrase",target:"All languages are really valuable despite their differences",fa:"همه زبان‌ها علی‌رغم تفاوت‌هایشان واقعاً ارزشمندند",bank:["All","languages","are","really","valuable","despite","their","differences"]},
+    {type:"phrase",target:"we should respect all languages",fa:"باید به همه زبان‌ها احترام بگذاریم",bank:["we","should","respect","all","languages"]},
+    {type:"grammar",title:"نکته: endangered languages",text:"زبان‌های <b>endangered</b> زبان‌هایی هستند که تعداد کمی سخنور دارند و ممکن است از بین بروند."},
+    {type:"quiz",questions:[
+      {q:"حدود چند زبان در جهان وجود دارد؟",options:["۷۰۰","۷۰۰۰","۷۰٬۰۰۰","۷۰"],answer:1},
+      {q:"«endangered language» یعنی:",options:["زبان رسمی","زبان در خطر انقراض","زبان بین‌المللی","زبان مادری"],answer:1},
+      {q:"رایج‌ترین زبان دنیا:",options:["انگلیسی","چینی","اسپانیایی","عربی"],answer:1},
+      {q:"«valuable» یعنی:",options:["بی‌ارزش","ارزشمند","سخت","آسان"],answer:1}
+    ]}
+  ]},
+  grammar: { title: "Grammar", steps: [
+    {type:"word",word:"countable"},{type:"word",word:"uncountable"},{type:"word",word:"many"},{type:"word",word:"much"},
+    {type:"word",word:"a lot of"},{type:"word",word:"a few"},{type:"word",word:"a little"},
+    {type:"grammar",title:"اسم‌های قابل شمارش و غیرقابل شمارش",text:"<b>قابل شمارش</b>: a book, two books, many books<br><b>غیرقابل شمارش</b>: information, milk, bread<br>قبل از غیرقابل شمارش: much / a little / a lot of<br>قبل از قابل شمارش: many / a few / a lot of"},
+    {type:"word",word:"a bottle of"},{type:"word",word:"a loaf of"},{type:"word",word:"a piece of"},{type:"word",word:"a glass of"},
+    {type:"phrase",target:"How many books do you need",fa:"چند کتاب نیاز داری؟",bank:["How","many","books","do","you","need"]},
+    {type:"phrase",target:"How much information does she need",fa:"او چقدر اطلاعات نیاز دارد؟",bank:["How","much","information","does","she","need"]},
+    {type:"phrase",target:"Please buy a loaf of bread",fa:"لطفاً یک قرص نان بخر",bank:["Please","buy","a","loaf","of","bread"]},
+    {type:"phrase",target:"Could you bring me a glass of water",fa:"می‌توانی یک لیوان آب برایم بیاوری؟",bank:["Could","you","bring","me","a","glass","of","water"]},
+    {type:"quiz",questions:[
+      {q:"کدام غیرقابل شمارش است؟",options:["book","information","student","apple"],answer:1},
+      {q:"قبل از milk کدام درست است؟",options:["many milk","much milk","a few milk","two milk"],answer:1},
+      {q:"«a loaf of bread» یعنی:",options:["یک بطری نان","یک قرص نان","یک تکه کیک","یک لیوان آب"],answer:1},
+      {q:"How _____ books do you have?",options:["much","many","little","a little"],answer:1}
+    ]}
+  ]},
+  listening: { title: "Listening & Speaking", steps: [
+    {type:"word",word:"how much"},{type:"word",word:"how many"},{type:"word",word:"looking for"},{type:"word",word:"candles"},{type:"word",word:"need"},
+    {type:"phrase",target:"How much is it",fa:"قیمتش چقدر است؟",bank:["How","much","is","it"]},
+    {type:"phrase",target:"How many candles do you need",fa:"چند شمع نیاز داری؟",bank:["How","many","candles","do","you","need"]},
+    {type:"phrase",target:"I am looking for some birthday candles",fa:"دنبال چند شمع تولد می‌گردم",bank:["I","am","looking","for","some","birthday","candles"]},
+    {type:"grammar",title:"How much vs How many",text:"<b>How much</b> → قیمت یا غیرقابل شمارش<br><b>How many</b> → قابل شمارش"},
+    {type:"quiz",questions:[
+      {q:"برای پرسیدن قیمت:",options:["How many","How much","How long","How old"],answer:1},
+      {q:"«I'm looking for...» یعنی:",options:["من پیدا کردم","من دنبال ... می‌گردم","من خریدم","من فروختم"],answer:1},
+      {q:"How _____ candles do you need?",options:["much","many","little","old"],answer:1}
+    ]}
+  ]},
+  writing: { title: "Writing", steps: [
+    {type:"word",word:"subject"},{type:"word",word:"verb"},{type:"word",word:"object"},{type:"word",word:"sentence"},
+    {type:"grammar",title:"جمله ساده چیست؟",text:"هر جمله ساده حداقل یک <b>فاعل</b> و یک <b>فعل</b> دارد.<br>مثال: <b>Mahan</b> <u>is sleeping</u>."},
+    {type:"phrase",target:"Mahan is sleeping",fa:"ماهان خواب است",bank:["Mahan","is","sleeping"]},
+    {type:"phrase",target:"The bird does not sing",fa:"پرنده آواز نمی‌خواند",bank:["The","bird","does","not","sing"]},
+    {type:"phrase",target:"The students are drinking milk",fa:"دانش‌آموزان شیر می‌نوشند",bank:["The","students","are","drinking","milk"]},
+    {type:"phrase",target:"We must respect our neighbors",fa:"باید به همسایگانمان احترام بگذاریم",bank:["We","must","respect","our","neighbors"]},
+    {type:"quiz",questions:[
+      {q:"در «Mahan is sleeping» فاعل کدام است؟",options:["is","sleeping","Mahan","the"],answer:2},
+      {q:"مفعول در «They drink milk»؟",options:["They","drink","milk","هیچکدام"],answer:2},
+      {q:"جمله ساده حداقل باید چه داشته باشد؟",options:["فاعل و مفعول","فاعل و فعل","فقط فعل","صفت"],answer:1}
+    ]}
+  ]}
+};
+
+const PAGES = [
+  {id:"getready",title:"Get Ready",pages:"17–18",icon:"🗺️",faDesc:"نقشه و تابلوها",studyKey:null,html:`<div class="book-section-title">Get Ready</div><p class="book-text"><strong>A.</strong> Look at the map. Choose six countries and write their languages.</p><div class="placeholder-img">🗺️ Map of Central & South Asia</div>`},
+  {id:"conversation",title:"Conversation – Mr. Saberian",pages:"19–20",icon:"💬",faDesc:"مصاحبه با مترجم",studyKey:"conversation",html:`<div class="book-section-title">Conversation</div><div class="word-bank"><strong>Word Bank:</strong> <span>besides</span> <span>mother tongue</span> <span>experience</span> <span>absolutely</span> <span>fluently</span></div><div class="dialogue"><p><strong>Meysam:</strong> I heard you know three languages. Is that right?</p><p><strong>Mr. Saberian:</strong> Well, actually four languages.</p><p><strong>Mr. Saberian:</strong> Besides my mother tongue, Persian, I know English, French and Russian well.</p><p><strong>Mr. Saberian:</strong> I began learning English at school when I was thirteen.</p><p><strong>Mr. Saberian:</strong> My experience says interest and hard work are really more important than age.</p><p><strong>Mr. Saberian:</strong> To be honest, my favorite language is absolutely my mother tongue!</p></div>`},
+  {id:"newwords",title:"New Words & Expressions",pages:"21–23",icon:"📖",faDesc:"واژگان جدید",studyKey:"newwords",html:`<div class="book-section-title">New Words</div><div class="vocab-item"><strong>region</strong> — farming regions of Iran</div><div class="vocab-item"><strong>continent</strong> — Asia is the largest continent</div><div class="vocab-item"><strong>exist</strong> — Does water exist on Mars?</div><div class="vocab-item"><strong>native</strong> — native language</div><div class="vocab-item"><strong>despite</strong> — despite the bad weather</div>`},
+  {id:"reading",title:"Reading – Languages of the World",pages:"24–26",icon:"📑",faDesc:"متن زبان‌های جهان",studyKey:"reading",html:`<div class="book-section-title">Reading</div><p class="book-text">Language is a system of communication. About <strong>7000 languages</strong> exist in the world. The most popular is Chinese. Languages with very few speakers are called <strong>endangered languages</strong>. All languages are valuable, despite their differences. We should respect all languages.</p>`},
+  {id:"grammar",title:"Grammar – Countable & Uncountable",pages:"28–31",icon:"🔤",faDesc:"قابل / غیرقابل شمارش",studyKey:"grammar",html:`<div class="book-section-title">Grammar</div><table class="book-table"><tr><th>Countable</th><th>Uncountable</th></tr><tr><td>many books</td><td>much information</td></tr><tr><td>a few men</td><td>a little bread</td></tr></table><div class="hint-box">a bottle of water · a loaf of bread · a glass of juice · a piece of cake</div>`},
+  {id:"listening",title:"Listening & Speaking – Shopping",pages:"34–35",icon:"🛒",faDesc:"خرید و قیمت",studyKey:"listening",html:`<div class="book-section-title">Listening and Speaking</div><div class="dialogue"><p>● I’m looking for some birthday candles.</p><p>■ How many candles do you need?</p><p>● How much are those?</p></div>`},
+  {id:"writing",title:"Writing – Simple Sentences",pages:"37–45",icon:"✍️",faDesc:"فاعل، فعل، مفعول",studyKey:"writing",html:`<div class="book-section-title">Writing</div><p class="book-text">A simple sentence needs a <strong>subject</strong> and a <strong>verb</strong>.</p><div class="exercise-box"><p><u>Mahan</u> <u>is sleeping</u>.</p><p>The students are drinking <strong>milk</strong>.</p></div>`}
+];
+
+let currentPageIdx=0, studySteps=[], studyIdx=0, selectedSlots=[], currentPhraseBank=[];
+let quizIdx=0, quizCorrect=0;
+let taughtWords=new Set(JSON.parse(localStorage.getItem("vision2_taught")||"[]"));
+let completedSections=new Set(JSON.parse(localStorage.getItem("vision2_done")||"[]"));
+let flashcards=JSON.parse(localStorage.getItem("vision2_fc")||"[]");
+
+function init(){renderTOC();updateFcBadge();showScreen("homeScreen");}
+function showScreen(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");}
+function goHome(){showScreen("homeScreen");document.getElementById("headerTitle").innerText="Vision 2";renderTOC();}
+function renderTOC(){
+  const list=document.getElementById("sectionList");list.innerHTML="";
+  PAGES.forEach((p,i)=>{
+    const done=completedSections.has(p.id);
+    const card=document.createElement("div");card.className="section-card";card.onclick=()=>openPage(i);
+    card.innerHTML=`${done?'<span class="sec-done">✓ تمام</span>':''}<div class="sec-icon">${p.icon}</div><div class="sec-info"><h3>${p.title}</h3><p>${p.faDesc}</p></div><span class="sec-pages">${p.pages}</span>`;
+    list.appendChild(card);
+  });
+}
+function openPage(idx){currentPageIdx=idx;renderBookPage();showScreen("bookScreen");}
+function renderBookPage(){
+  const p=PAGES[currentPageIdx];
+  document.getElementById("headerTitle").innerText=p.title;
+  const done=completedSections.has(p.id);
+  const studyBtn=p.studyKey?`<button class="study-btn ${done?'done':''}" onclick="startStudy('${p.studyKey}')">${done?'✅ دوباره مطالعه':'📚 مطالعه (Easy)'}</button>`:"";
+  document.getElementById("bookContent").innerHTML=`<div class="page-header">${studyBtn}<span class="page-num-badge">صفحه ${p.pages}</span></div>${p.html}`;
+  document.getElementById("prevBtn").disabled=currentPageIdx===0;
+  document.getElementById("nextBtn").disabled=currentPageIdx===PAGES.length-1;
+  document.getElementById("bookContent").scrollTop=0;
+}
+function prevPage(){if(currentPageIdx>0){currentPageIdx--;renderBookPage();}}
+function nextPage(){if(currentPageIdx<PAGES.length-1){currentPageIdx++;renderBookPage();}}
+
+function startStudy(key){
+  const data=STUDY[key];if(!data)return;
+  studySteps=data.steps;studyIdx=0;quizIdx=0;quizCorrect=0;selectedSlots=[];
+  document.getElementById("headerTitle").innerText="مطالعه · "+data.title;
+  showScreen("studyScreen");renderStudyStep();
+}
+function updateProgress(){const pct=studySteps.length?Math.round((studyIdx/studySteps.length)*100):0;document.getElementById("studyProgress").style.width=pct+"%";}
+function renderStudyStep(){
+  updateProgress();
+  const container=document.getElementById("studyContent");
+  const nextBtn=document.getElementById("studyNextBtn");
+  const label=document.getElementById("stepLabel");
+  nextBtn.classList.add("hidden");nextBtn.onclick=null;container.innerHTML="";
+  if(studyIdx>=studySteps.length){
+    const page=PAGES[currentPageIdx];if(page){completedSections.add(page.id);localStorage.setItem("vision2_done",JSON.stringify([...completedSections]));}
+    label.innerText="";
+    container.innerHTML=`<div class="finish-box"><h2>🎉 آفرین!</h2><p>این بخش را تمام کردی. حالا می‌توانی به صفحه بعد بروی.</p></div>`;
+    nextBtn.classList.remove("hidden");nextBtn.innerText="↩️ بازگشت به کتاب";
+    nextBtn.onclick=()=>{showScreen("bookScreen");renderBookPage();};
+    return;
+  }
+  const step=studySteps[studyIdx];
+  label.innerText=`مرحله ${studyIdx+1} از ${studySteps.length}`;
+  if(step.type==="word")renderWordStep(step,container,nextBtn);
+  else if(step.type==="phrase"||step.type==="sentence")renderBuildStep(step,container,nextBtn);
+  else if(step.type==="grammar")renderGrammarStep(step,container,nextBtn);
+  else if(step.type==="quiz")renderQuizStep(step,container,nextBtn);
+}
+
+function renderWordStep(step,container,nextBtn){
+  const w=step.word;const info=DICT[w]||{fa:"—",example:""};
+  taughtWords.add(w.toLowerCase());localStorage.setItem("vision2_taught",JSON.stringify([...taughtWords]));
+  speakTwice(w);
+  const isSaved=flashcards.some(f=>f.word.toLowerCase()===w.toLowerCase());
+  container.innerHTML=`<div class="word-teach"><div class="word-big"><button class="tts-btn" onclick="speak('${w.replace(/'/g,"\\'")}')">🔊</button><span>${w}</span></div><div class="word-meaning">${info.fa}</div>${info.example?`<div class="word-example">${info.example}</div>`:""}<div class="action-row"><button class="btn save-btn" id="saveWordBtn" ${isSaved?"disabled":""}>${isSaved?"✅ ذخیره شد":"➕ افزودن به فلش‌کارت"}</button></div></div>`;
+  if(!isSaved){document.getElementById("saveWordBtn").onclick=()=>{flashcards.push({word:w,meaning:info.fa});localStorage.setItem("vision2_fc",JSON.stringify(flashcards));updateFcBadge();const b=document.getElementById("saveWordBtn");b.disabled=true;b.innerText="✅ ذخیره شد";};}
+  nextBtn.classList.remove("hidden");nextBtn.innerText="یاد گرفتم ←";nextBtn.onclick=()=>{studyIdx++;renderStudyStep();};
+}
+
+function renderBuildStep(step,container,nextBtn){
+  selectedSlots=[];currentPhraseBank=shuffle([...step.bank]);
+  container.innerHTML=`<div class="build-wrap"><div class="build-prompt">${step.type==="sentence"?"جمله کامل را بساز":"عبارت را بساز"}</div><div class="build-fa">${step.fa}</div><div class="slots" id="buildSlots"></div><div class="bank-row" id="buildBank"></div><div class="check-msg" id="checkMsg"></div><div class="help-bar"><button class="help-btn" onclick="toggleHelp()">🆘 کمک (معنی کلمات)</button></div><div class="help-panel" id="helpPanel"></div></div>`;
+  renderBank(step);renderSlotsUI();
+  nextBtn.classList.remove("hidden");nextBtn.innerText="بررسی جواب";nextBtn.onclick=()=>checkBuild(step);
+}
+function renderBank(step){
+  const bankEl=document.getElementById("buildBank");if(!bankEl)return;bankEl.innerHTML="";
+  currentPhraseBank.forEach(w=>{const btn=document.createElement("button");btn.className="bank-word";btn.innerText=w;
+    btn.onclick=()=>{selectedSlots.push(w);const idx=currentPhraseBank.indexOf(w);if(idx>=0)currentPhraseBank.splice(idx,1);renderBank(step);renderSlotsUI();};
+    bankEl.appendChild(btn);});
+}
+function renderSlotsUI(){
+  const slots=document.getElementById("buildSlots");if(!slots)return;slots.innerHTML="";
+  selectedSlots.forEach((w,i)=>{const btn=document.createElement("button");btn.className="slot-word";btn.innerText=w;
+    btn.onclick=()=>{selectedSlots.splice(i,1);currentPhraseBank.push(w);renderBank(studySteps[studyIdx]);renderSlotsUI();};
+    slots.appendChild(btn);});
+}
+function checkBuild(step){
+  const msg=document.getElementById("checkMsg");const nextBtn=document.getElementById("studyNextBtn");
+  const answer=selectedSlots.join(" ").toLowerCase().replace(/[?.!,]/g,"");
+  const target=step.target.toLowerCase().replace(/[?.!,]/g,"");
+  if(answer===target){msg.className="check-msg ok";msg.innerText="✅ درست! آفرین";speak(step.target);nextBtn.innerText="ادامه ←";nextBtn.onclick=()=>{studyIdx++;renderStudyStep();};}
+  else{msg.className="check-msg bad";msg.innerText="❌ دوباره تلاش کن";}
+}
+function toggleHelp(){
+  const panel=document.getElementById("helpPanel");if(!panel)return;
+  if(panel.classList.contains("show")){panel.classList.remove("show");return;}
+  const step=studySteps[studyIdx];const words=[...new Set([...(step.bank||[]),...selectedSlots])];
+  panel.innerHTML=words.map(w=>{const info=DICT[w]||DICT[w.toLowerCase()]||{fa:"?"};return`<div class="help-word-item"><span class="en">${w}</span><span class="fa">${info.fa}</span></div>`;}).join("");
+  panel.classList.add("show");
+}
+
+function renderGrammarStep(step,container,nextBtn){
+  container.innerHTML=`<div class="grammar-note"><span class="label">نکته گرامری</span><h3>${step.title}</h3><p>${step.text}</p></div>`;
+  nextBtn.classList.remove("hidden");nextBtn.innerText="متوجه شدم ←";nextBtn.onclick=()=>{studyIdx++;renderStudyStep();};
+}
+
+function renderQuizStep(step,container,nextBtn){quizIdx=0;quizCorrect=0;showQuizQuestion(step,container,nextBtn);}
+function showQuizQuestion(step,container,nextBtn){
+  const qs=step.questions;
+  if(quizIdx>=qs.length){
+    const passed=quizCorrect>=Math.ceil(qs.length*0.7);
+    container.innerHTML=`<div class="finish-box"><h2>${passed?"🎉 قبول شدی!":"📕 نیاز به مرور"}</h2><p>نتیجه: ${quizCorrect} از ${qs.length} درست</p>${passed?"<p>می‌توانی ادامه بدهی.</p>":"<p>پیشنهاد: دوباره مطالعه کن.</p>"}</div>`;
+    nextBtn.classList.remove("hidden");
+    if(passed){nextBtn.innerText="ادامه ←";nextBtn.onclick=()=>{studyIdx++;renderStudyStep();};}
+    else{nextBtn.innerText="مطالعه دوباره";nextBtn.onclick=()=>{studyIdx=0;renderStudyStep();};}
+    return;
+  }
+  const q=qs[quizIdx];nextBtn.classList.add("hidden");
+  container.innerHTML=`<div class="step-label" style="margin-bottom:8px">سؤال ${quizIdx+1} از ${qs.length}</div><div class="quiz-q">${q.q}</div><div class="quiz-options" id="quizOpts"></div>`;
+  const optsEl=document.getElementById("quizOpts");
+  q.options.forEach((opt,i)=>{
+    const btn=document.createElement("button");btn.className="quiz-opt";btn.innerText=opt;
+    btn.onclick=()=>{optsEl.querySelectorAll(".quiz-opt").forEach(b=>b.classList.add("disabled"));
+      if(i===q.answer){btn.classList.add("correct");quizCorrect++;}else{btn.classList.add("wrong");optsEl.children[q.answer].classList.add("correct");}
+      nextBtn.classList.remove("hidden");nextBtn.innerText=quizIdx+1<qs.length?"سؤال بعد ←":"دیدن نتیجه";
+      nextBtn.onclick=()=>{quizIdx++;showQuizQuestion(step,container,nextBtn);};
+    };
+    optsEl.appendChild(btn);
+  });
+}
+
+function speak(text){if(!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=0.88;window.speechSynthesis.speak(u);}
+function speakTwice(text){if(!window.speechSynthesis)return;window.speechSynthesis.cancel();const u1=new SpeechSynthesisUtterance(text);u1.lang="en-US";u1.rate=0.88;u1.onend=()=>{setTimeout(()=>{const u2=new SpeechSynthesisUtterance(text);u2.lang="en-US";u2.rate=0.88;window.speechSynthesis.speak(u2);},350);};window.speechSynthesis.speak(u1);}
+
+function updateFcBadge(){document.getElementById("fcCount").innerText=flashcards.length;}
+function openFlashcards(){
+  document.getElementById("headerTitle").innerText="فلش‌کارت‌ها";
+  const list=document.getElementById("fcList");
+  if(!flashcards.length){list.innerHTML=`<p style="text-align:center;color:#718096;padding:40px 20px">هنوز فلش‌کارتی نداری.<br>در حالت مطالعه روی «افزودن به فلش‌کارت» بزن.</p>`;}
+  else{list.innerHTML=flashcards.map((f,i)=>`<div class="fc-card"><div><div class="en">${f.word}</div><div class="fa">${f.meaning}</div></div><div style="display:flex;gap:6px"><button class="header-btn" onclick="speak('${f.word.replace(/'/g,"\\'")}')">🔊</button><button class="header-btn" onclick="removeFc(${i})">🗑️</button></div></div>`).join("");}
+  showScreen("fcScreen");
+}
+function removeFc(i){flashcards.splice(i,1);localStorage.setItem("vision2_fc",JSON.stringify(flashcards));updateFcBadge();openFlashcards();}
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+init();
 </script>
 </body>
 </html>
